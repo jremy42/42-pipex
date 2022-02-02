@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.h                                      :+:      :+:    :+:   */
+/*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:42 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 18:56:34 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 19:30:45 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,7 @@ int		__here_doc_pipe(t_pipex *pipex);
 int		__pipex_end(t_pipex *pipex, char **envp);
 void	__close_pipe(t_pipe *pipe);
 void	__close_last_pipe(t_pipex *pipex, int pipe);
+char	*__get_path(char *cmd, char *path);
+char	*__get_path2(char *cmd, char *path);
 
 #endif
