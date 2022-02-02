@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:47 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 16:21:41 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 18:48:40 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	__here_doc_pipe(t_pipex *pipex)
 	stdin = __strdup("");
 	if (!stdin)
 		return (-1);
-	file = open(".hd.tmp", O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	file = open(".hd.tmp", O_CREAT | O_WRONLY | O_TRUNC, 00644);
 	if (file < 0)
 		return (-1);
 	stdin = __get_stdin(pipex, stdin);
@@ -53,7 +53,7 @@ int	__here_doc_pipe(t_pipex *pipex)
 	__putstr_fd(stdin, file);
 	free(stdin);
 	__close(file, pipex);
-	file = open(".hd.tmp", O_RDONLY, 0777);
+	file = open(".hd.tmp", O_RDONLY, 00644);
 	return (file);
 }
 
@@ -62,13 +62,13 @@ void	__open_doc(t_pipex *pipex, char **av, int ac)
 	if (pipex->here_doc == 1)
 	{
 		pipex->eof = av[2];
-		pipex->file_out = open(av[ac -1], O_CREAT | O_WRONLY | O_APPEND, 0777);
+		pipex->file_out = open(av[ac -1], O_CREAT | O_WRONLY | O_APPEND, 00644);
 		if (pipex->file_out < 0)
 			__exit("Open error\n", pipex, 1, 0);
 	}
 	else
 	{
-		pipex->file_out = open(av[ac -1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+		pipex->file_out = open(av[ac -1], O_CREAT | O_WRONLY | O_TRUNC, 00644);
 		if (pipex->file_out < 0)
 			__exit("Open error\n", pipex, 1, 0);
 	}

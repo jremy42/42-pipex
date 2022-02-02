@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:40 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 15:40:09 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 13:04:21 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,19 @@ void	__close(int file, t_pipex *pipex)
 		__exit("Close error\n", pipex, 1, 0);
 }
 
-int	__wait_child(void)
+int	__wait_child(pid_t pid)
 {
 	int	status;
 	int	ret;
 
 	status = 0;
-	wait(&status);
+	waitpid(pid, &status, 0);
 	if (WIFEXITED(status) > 0)
 		ret = (WEXITSTATUS(status));
 	if (WIFSIGNALED(status) > 0)
 		ret = (WTERMSIG(status));
+	while (waitpid(-1, NULL, 0) > 0)
+		;
 	return (ret);
 }
 
@@ -53,8 +55,6 @@ void	__close_pipe(t_pipe *pipe)
 	while (pipe != NULL)
 	{
 		tmp = pipe->next;
-		close(pipe->pipe_fds[0]);
-		close(pipe->pipe_fds[1]);
 		free(pipe);
 		pipe = tmp;
 	}

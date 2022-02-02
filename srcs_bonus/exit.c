@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:40 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 18:55:12 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 14:16:19 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	__wait_child(pid_t pid)
 		ret = (WEXITSTATUS(status));
 	if (WIFSIGNALED(status) > 0)
 		ret = (WTERMSIG(status));
+	while (waitpid(-1, NULL, 0) > 0)
+		;
 	return (ret);
 }
 
@@ -53,10 +55,6 @@ void	__close_pipe(t_pipe *pipe)
 	while (pipe != NULL)
 	{
 		tmp = pipe->next;
-		printf("fds[0] = %d \n",pipe->pipe_fds[0]);
-		printf("fds[1] = %d \n",pipe->pipe_fds[1]);
-		printf("close = %d\n",close(pipe->pipe_fds[0]));
-		printf("close = %d\n",close(pipe->pipe_fds[1]));
 		free(pipe);
 		pipe = tmp;
 	}

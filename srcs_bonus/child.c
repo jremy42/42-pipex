@@ -6,11 +6,12 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:23 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 16:02:57 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 13:02:53 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
+#include <fcntl.h>
 
 void	__child(t_pipex *pipex, t_cmd *cmd, char **envp)
 {

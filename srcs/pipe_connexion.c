@@ -6,11 +6,30 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:55 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 16:26:34 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 13:04:32 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+int	__kill_pipe(t_pipex *pipex, int index)
+{
+	t_pipe	*tmp;
+
+	tmp = pipex->pipe;
+	while (tmp->index != index)
+	{
+		close(tmp->pipe_fds[0]);
+		tmp = tmp->next;
+	}
+	while (tmp != NULL)
+	{
+		close(tmp->pipe_fds[0]);
+		close(tmp->pipe_fds[1]);
+		tmp = tmp->next;
+	}
+	return (0);
+}
 
 int	__first_pipe(t_pipex *pipex)
 {
@@ -25,6 +44,7 @@ int	__first_pipe(t_pipex *pipex)
 	if (dup2(pipex->file_in, STDIN_FILENO) < 0)
 		__exit("", pipex, 1, 0);
 	__close(pipex->pipe->pipe_fds[0], pipex);
+	__kill_pipe(pipex, pipex->index);
 	return (0);
 }
 
@@ -39,6 +59,7 @@ int	__last_pipe(t_pipex *pipex)
 		__exit("", pipex, 1, 0);
 	if (dup2(tmp->pipe_fds[0], STDIN_FILENO) < 0)
 		__exit("", pipex, 1, 0);
+	__kill_pipe(pipex, pipex->index);
 	return (0);
 }
 
@@ -53,5 +74,6 @@ int	__middle_pipe(t_pipex *pipex)
 		__exit("", pipex, 1, 0);
 	if (dup2(tmp->pipe_fds[0], STDIN_FILENO) < 0)
 		__exit("", pipex, 1, 0);
+	__kill_pipe(pipex, pipex->index);
 	return (0);
 }

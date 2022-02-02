@@ -6,12 +6,12 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:42 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 18:56:34 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 14:17:12 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>

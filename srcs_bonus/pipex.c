@@ -6,11 +6,11 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:18 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 18:51:40 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 19:02:55 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	__init_pipex(t_pipex *pipex, char *here_doc)
 {
@@ -52,7 +52,11 @@ void	__close_last_pipe(t_pipex *pipex, int pipe)
 
 	tmp = pipex->pipe;
 	while (tmp->index != pipex->index)
+	{
+		if (tmp->index == pipex->index - 1)
+			close(tmp->pipe_fds[0]);
 		tmp = tmp->next;
+	}
 	__close(tmp->pipe_fds[pipe], pipex);
 }
 
@@ -76,6 +80,10 @@ void	__pipex(t_pipex *pipex, char **envp, pid_t pid)
 				tmp = tmp->next;
 			__child(pipex, tmp, envp);
 		}
+		if (pipex->here_doc == 1 && pipex->index == 0)
+			waitpid(pid, NULL, 0);
+		if (pipex->index == 0)
+			__close(pipex->file_in, pipex);
 		__close_last_pipe(pipex, 1);
 		pipex->index++;
 	}	
@@ -97,7 +105,7 @@ int	main(int ac, char **av, char **envp)
 	__create_cmd(&pipex, av, ac);
 	__create_pipe(&pipex);
 	__pipex(&pipex, envp, pid);
-	__pipex_end(&pipex, envp);
+	ret = __pipex_end(&pipex, envp);
 	__exit("", &pipex, ret, 1);
 	return (0);
 }

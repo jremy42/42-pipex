@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:06 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/01 17:11:52 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 13:04:40 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_pipe	*__pipe_new(int index)
 	{
 		free(newlst);
 		return (NULL);
-	}	
+	}
 	newlst->index = index;
 	newlst->next = NULL;
 	return (newlst);
@@ -69,11 +69,25 @@ int	__create_pipe(t_pipex *pipex)
 int	__pipex_end(t_pipex *pipex, char **envp)
 {
 	t_cmd	*tmp;
+	pid_t	pid;
+	int		ret;
 
-	__last_pipe(pipex);
-	tmp = pipex->cmd;
-	while (tmp->index != pipex->index)
-		tmp = tmp->next;
-	__child(pipex, tmp, envp);
-	return (0);
+	pid = 0;
+	ret = 0;
+	pid = fork();
+	ret = 0;
+	if (pid == 0)
+	{
+		__last_pipe(pipex);
+		tmp = pipex->cmd;
+		while (tmp->index != pipex->index)
+			tmp = tmp->next;
+		__child(pipex, tmp, envp);
+	}
+	else
+	{
+		__close_last_pipe(pipex, 1);
+		ret = __wait_child(pid);
+	}
+	return (ret);
 }
