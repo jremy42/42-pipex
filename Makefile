@@ -16,6 +16,7 @@ SRC_BONUS = srcs_bonus/pipex.c \
 	srcs_bonus/pipe.c\
 	srcs_bonus/child_utils.c\
 	srcs_bonus/pipe_connexion.c\
+	srcs_bonus/error_utils.c\
 	srcs_bonus/here_doc.c
 
 IFLAGS =  -I includes/ -I libft/includes

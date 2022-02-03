@@ -6,11 +6,11 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:18 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/02 19:02:55 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/03 14:23:33 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 void	__init_pipex(t_pipex *pipex, char *here_doc)
 {
@@ -80,8 +80,6 @@ void	__pipex(t_pipex *pipex, char **envp, pid_t pid)
 				tmp = tmp->next;
 			__child(pipex, tmp, envp);
 		}
-		if (pipex->here_doc == 1 && pipex->index == 0)
-			waitpid(pid, NULL, 0);
 		if (pipex->index == 0)
 			__close(pipex->file_in, pipex);
 		__close_last_pipe(pipex, 1);
@@ -98,6 +96,8 @@ int	main(int ac, char **av, char **envp)
 	pid = 0;
 	ret = 0;
 	if (ac < 5)
+		exit(1);
+	if (__strncmp(av[1], "here_doc", 9) == 0 && ac < 6)
 		exit(1);
 	__init_pipex(&pipex, av[1]);
 	__open_doc(&pipex, av, ac);

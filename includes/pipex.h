@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:42 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/03 10:49:13 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/03 16:32:18 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int		__create_cmd(t_pipex *pipex, char **cmd, int ac);
 void	__child(t_pipex *pipex, t_cmd *cmd, char **envp);
 void	__parent(t_pipex *pipex, t_cmd *cmd, char **envp);
 void	__connect_pipe_child(t_pipex *pipex);
-char	*__get_path(char *cmd, char *path);
 char	**__free_split(char**tab);
 void	__connect_pipe_parent(t_pipex *pipex);
 int		__create_pipe(t_pipex *pipex);
@@ -72,7 +71,7 @@ int		__here_doc_pipe(t_pipex *pipex);
 int		__pipex_end(t_pipex *pipex, char **envp);
 void	__close_pipe(t_pipe *pipe);
 void	__close_last_pipe(t_pipex *pipex, int pipe);
-char	*__get_path(char *cmd, char *path);
+char	*__get_path(char *cmd, char *path, t_pipex *pipex, char **newargv);
 char	*__get_path2(char *cmd, char *path);
 void	__print_error(char *str, int err, int end);
 

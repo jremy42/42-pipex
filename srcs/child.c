@@ -6,13 +6,13 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:23 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/03 13:12:58 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/03 18:05:51 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*__get_path(char *cmd, char *path)
+char	*__get_path(char *cmd, char *path, t_pipex *pipex, char **newargv)
 {
 	if (__strchr(cmd, '/') != NULL)
 	{
@@ -23,6 +23,12 @@ char	*__get_path(char *cmd, char *path)
 		}
 		if (access(cmd, F_OK) == 0)
 			return (__strdup(cmd));
+	}
+	if (__strlen(cmd) == 0)
+	{
+		free(cmd);
+		__free_split(newargv);
+		__exit("", pipex, 0, 0);
 	}
 	if (path == NULL)
 		return (NULL);
@@ -37,7 +43,7 @@ int	__check_path(char *cmd)
 		if (cmd)
 			free(cmd);
 		return (-1);
-	}
+	}	
 	if (cmd[__strlen(cmd) - 1] == '/')
 	{
 		if (cmd)
@@ -55,7 +61,7 @@ void	__child(t_pipex *pipex, t_cmd *cmd, char **envp)
 	newargv = __split(cmd->cmd, ' ');
 	if (!newargv)
 		__exit("Malloc error in fork\n", pipex, 1, 0);
-	path = __get_path(newargv[0], pipex->path);
+	path = __get_path(newargv[0], pipex->path, pipex, newargv);
 	if (path == NULL || __check_path(path) == -1)
 	{
 		__free_split(newargv);
@@ -71,7 +77,7 @@ void	__child(t_pipex *pipex, t_cmd *cmd, char **envp)
 	{
 		__free_split(newargv);
 		free(path);
-		__exit("", pipex, 2, 0);
+		__exit("", pipex, 0, 0);
 	}
 	free(path);
 }

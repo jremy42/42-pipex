@@ -6,11 +6,11 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:47 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/02 18:57:47 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/02 18:48:40 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex_bonus.h"
+#include "pipex.h"
 
 char	*__get_stdin(t_pipex *pipex, char *stdin)
 {
