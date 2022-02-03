@@ -5,6 +5,7 @@ SRC = srcs/pipex.c \
 	srcs/pipe.c\
 	srcs/child_utils.c\
 	srcs/pipe_connexion.c\
+	srcs/error_utils.c\
 	srcs/here_doc.c
 
 

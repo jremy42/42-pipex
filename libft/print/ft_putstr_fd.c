@@ -14,14 +14,5 @@
 
 void	__putstr_fd(char const *s, int fd)
 {
-	size_t	i;
-
-	if (!s)
-		return ;
-	i = 0;
-	while (s[i])
-	{
-		__putchar_fd(s[i], fd);
-		i++;
-	}
+	write(fd, s, __strlen(s));
 }

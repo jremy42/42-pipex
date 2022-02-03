@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:40 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/02 13:04:21 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/03 10:49:37 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,22 +64,7 @@ void	__exit(char *str, t_pipex *pipex, int err, int end)
 {
 	if (pipex->here_doc == 1)
 		unlink(".hd.tmp");
-	if ((err == 1 || err == 127 || err == 126) && end == 0)
-		__putstr_fd("pipex: ", 2);
-	if (err == 127 && end == 0)
-	{
-		__putstr_fd(str, 2);
-		__putstr_fd(" command not found\n", 2);
-	}
-	else if (err == 126 && end == 0)
-	{
-		__putstr_fd(str, 2);
-		__putstr_fd(" permission denied\n", 2);
-	}
-	else
-		__putstr_fd(str, 2);
-	if (err == 1)
-		perror("pipex");
+	__print_error(str, err, end);
 	__close_pipe(pipex->pipe);
 	close(pipex->file_in);
 	close(pipex->file_out);
