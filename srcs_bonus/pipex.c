@@ -6,13 +6,13 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:18 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/03 14:23:33 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 11:02:29 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-void	__init_pipex(t_pipex *pipex, char *here_doc)
+void	__init_pipex(t_pipex *pipex, char *here_doc, int ac)
 {
 	pipex->pipe = NULL;
 	pipex->cmd = NULL;
@@ -23,7 +23,7 @@ void	__init_pipex(t_pipex *pipex, char *here_doc)
 	pipex->max_cmd = 0;
 	pipex->eof = NULL;
 	pipex->file = NULL;
-	if (__strncmp(here_doc, "here_doc", 9) == 0)
+	if (__strncmp(here_doc, "here_doc", 9) == 0 && ac > 5)
 		pipex->here_doc = 1;
 	else
 	{
@@ -64,6 +64,8 @@ void	__pipex(t_pipex *pipex, char **envp, pid_t pid)
 {
 	t_cmd	*tmp;
 
+	if (pipex->here_doc == 1)
+		__here_doc(pipex);
 	while (pipex->index < pipex->max_cmd)
 	{	
 		pid = fork();
@@ -97,9 +99,7 @@ int	main(int ac, char **av, char **envp)
 	ret = 0;
 	if (ac < 5)
 		exit(1);
-	if (__strncmp(av[1], "here_doc", 9) == 0 && ac < 6)
-		exit(1);
-	__init_pipex(&pipex, av[1]);
+	__init_pipex(&pipex, av[1], ac);
 	__open_doc(&pipex, av, ac);
 	pipex.path = __find_path(envp);
 	__create_cmd(&pipex, av, ac);

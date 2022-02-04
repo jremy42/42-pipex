@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:47 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/02 18:48:40 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 11:09:55 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	__here_doc_pipe(t_pipex *pipex)
 	__putstr_fd(stdin, file);
 	free(stdin);
 	__close(file, pipex);
-	file = open(".hd.tmp", O_RDONLY, 00644);
+	file = open(".hdtmp.", O_RDONLY, 00644);
 	return (file);
 }
 

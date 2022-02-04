@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:42 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/03 16:35:00 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 11:01:41 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ void	__close_pipe(t_pipe *pipe);
 void	__close_last_pipe(t_pipex *pipex, int pipe);
 char	*__get_path2(char *cmd, char *path);
 void	__print_error(char *str, int err, int end);
+void	__here_doc(t_pipex *pipex);
 
 #endif

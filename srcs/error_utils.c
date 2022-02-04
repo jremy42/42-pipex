@@ -6,7 +6,7 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 10:37:08 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/03 10:55:08 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 09:55:55 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ void	__print_error(char *str, int err, int end)
 	__putstr_fd(error, 2);
 	if (error)
 		free(error);
-	if (err == 1)
+	if (err == 1 && end == 0)
 		perror("pipex");
 }

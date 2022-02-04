@@ -6,11 +6,11 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:23 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/03 19:17:50 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 11:02:29 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 char	*__get_path(char *cmd, char *path, t_pipex *pipex, char **newargv)
 {

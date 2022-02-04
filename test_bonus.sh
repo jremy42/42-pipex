@@ -2,6 +2,7 @@
 
 echo -e "\033[34m ##############################PIPEX #############################\033[0m"
 
+echo $SHLVL
 
 
 #test 1
@@ -106,7 +107,7 @@ echo "
 
 "
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
-echo -e "\033[1;37m [test 2] [1 cmd\033[0m"
+echo -e "\033[1;37m [test 3] [1 cmd\033[0m"
 echo -e "1 cmd test ./pipex_bonus input cat output
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
 ./pipex_bonus input "cat" output
@@ -141,7 +142,7 @@ echo "
 
 "
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
-echo -e "\033[1;37m [test 4] [3 cmd\033[0m"
+echo -e "\033[1;37m [test 4] [fail grep \033[0m"
 echo -e "./pipex_bonus input cat "wc -l" "grep toto" output
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
 ./pipex_bonus input cat "wc -l" "grep toto" output
@@ -709,7 +710,7 @@ echo -e "./pipex_bonus "here_doc" eof cat output
 ./pipex_bonus "here_doc" eof cat output
 RET1=$?
 echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
-echo -e "< input wc -dfdfdfsf | wc > output2
+echo -e "< here_doc eof | cat > output2
 \033[1;33m>----------------------------------------TRUE----------------------------------------------------"
 < here_doc eof | cat > output2
 RET2=$?
@@ -942,7 +943,7 @@ diff output output2
 fi
 unset PATH
 /bin/valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus input cat/ "grep toto" output 1>/dev/null 2>/dev/null
-PATH=$PATH2
+export PATH=$PATH2
 if [  "$?" -ne "240" ]
 then
 echo -e "valgrind     : \033[32m[OK]\033[0m"
@@ -958,16 +959,16 @@ echo -e "\033[1;37m ------------------------------------------------------------
 echo -e "\033[1;37m [test 24] [bad path] \033[0m"
 echo -e "./pipex_bonus input /usr/bin/cat /usr/bin/cat output
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
-PATH2=$PATH
-PATH="TOTO"
+export PATH2=$PATH
+export PATH="TOTO"
 ./pipex_bonus input /usr/bin/cat /usr/bin/cat output
-RET1=$?
-PATH=$PATH2
+export RET1=$?
+export PATH=$PATH2
 echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
 echo -e "< input /usr/bin/cat | /usr/bin/cat > output2
 \033[1;33m>----------------------------------------TRUE----------------------------------------------------"
-PATH2=$PATH
-PATH="TOTO"
+export PATH2=$PATH
+export PATH="TOTO"
 < input /usr/bin/cat | /usr/bin/cat > output2
 RET2=$?
 PATH=$PATH2
@@ -989,9 +990,9 @@ echo -e "diff output  : \033[31m[NOK]\033[0m"
 echo "diff >"
 diff output output2
 fi
-PATH="TOTO"
+export PATH="TOTO"
 /bin/valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus input cat/ "grep toto" output 1>/dev/null 2>/dev/null
-PATH=$PATH2
+export PATH=$PATH2
 if [  "$?" -ne "240" ]
 then
 echo -e "valgrind     : \033[32m[OK]\033[0m"
@@ -1001,6 +1002,98 @@ cat leak
 fi
 rm -rf leak
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+
+#echo 25
+echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+echo -e "\033[1;37m [test 25] [bad path 2] \033[0m"
+echo -e "./pipex_bonus input cat cat output
+\033[1;36m>----------------------------------------YOURS---------------------------------------------------"
+export PATH2=$PATH
+export PATH="TOTO"
+(unset PATH && echo ">$PATH<" && ./pipex_bonus input cat cat output)
+RET1=$?
+export PATH=$PATH2
+echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
+echo -e "< input cat | cat > output2
+\033[1;33m>----------------------------------------TRUE----------------------------------------------------"
+export PATH2=$PATH
+export PATH="TOTO"
+< input cat | cat > output2
+RET2=$?
+export PATH=$PATH2
+echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
+if [ "$RET1" -eq "$RET2" ]
+then
+echo -e "return Value : \033[32m[OK]\033[0m"
+else
+echo -e "return Value : \033[31m[NOK]\033[0m"
+echo -e "\033[33m true : $RET2"
+echo -e "yours : $RET1 \033[0m"
+fi
+diff output output2 1>/dev/null 2>/dev/null
+if [  "$?" -eq "0" ]
+then
+echo -e "diff output  : \033[32m[OK]\033[0m"
+else
+echo -e "diff output  : \033[31m[NOK]\033[0m"
+echo "diff >"
+diff output output2
+fi
+export PATH="TOTO"
+/bin/valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus input cat cat output 1>/dev/null 2>/dev/null
+export PATH=$PATH2
+if [  "$?" -ne "240" ]
+then
+echo -e "valgrind     : \033[32m[OK]\033[0m"
+else
+echo -e "valgrind     : \033[31m[NOK]\033[0m"
+cat leak
+fi
+rm -rf leak
+echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+
+
+#echo 25
+echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+echo -e "\033[1;37m [test 26] [YES YES YES] \033[0m"
+echo -e "./pipex_bonus input yes head -1 output
+\033[1;36m>----------------------------------------YOURS---------------------------------------------------"
+./pipex_bonus input yes "head -1" output
+RET1=$?
+echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
+echo -e "< input /usr/bin/cat | /usr/bin/cat > output2
+\033[1;33m>----------------------------------------TRUE----------------------------------------------------"
+< input yes | head -1 > output2
+RET2=$?
+echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
+if [ "$RET1" -eq "$RET2" ]
+then
+echo -e "return Value : \033[32m[OK]\033[0m"
+else
+echo -e "return Value : \033[31m[NOK]\033[0m"
+echo -e "\033[33m true : $RET2"
+echo -e "yours : $RET1 \033[0m"
+fi
+diff output output2 1>/dev/null 2>/dev/null
+if [  "$?" -eq "0" ]
+then
+echo -e "diff output  : \033[32m[OK]\033[0m"
+else
+echo -e "diff output  : \033[31m[NOK]\033[0m"
+echo "diff >"
+diff output output2
+fi
+/bin/valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus input yes "head -1" output 1>/dev/null 2>/dev/null
+if [  "$?" -ne "240" ]
+then
+echo -e "valgrind     : \033[32m[OK]\033[0m"
+else
+echo -e "valgrind     : \033[31m[NOK]\033[0m"
+cat leak
+fi
+rm -rf leak
+echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+
 rm -rf dosser dossier2 not out  output  output2
 
 
@@ -1051,12 +1144,12 @@ echo -e "\033[1;37m ------------------------------------------------------------
 echo "toto" >> input
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
 echo -e "\033[1;37m [test 2] [basic test] \033[0m"
-echo -e "./pipex_bonu input ls "grep pipex" "wc -l" output
+echo -e "./pipex_bonus input ls "grep toto" "wc -l" output
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
-./pipex_bonus input cat "grep pipex" "wc -l" output
+./pipex_bonus input cat "grep toto" "wc -l" output
 RET1=$?
 echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
-echo -e "< input ls | grep pipex | wc -l > output2
+echo -e "< input ls | grep toto | wc -l > output2
 \033[1;33m>----------------------------------------TRUE----------------------------------------------------"
 < input cat | grep toto | wc -l > output2
 RET2=$?
@@ -1117,7 +1210,7 @@ echo -e "\033[1;37m ------------------------------------------------------------
 echo -e "\033[1;37m [test 4] [urandom + fail] \033[0m"
 echo -e "./pipex_bonus_bonus /dev/urandom "cat" "not" "cat" "head -1" output
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
-./pipex_bonus_bonus /dev/urandom "cat" "not" "cat" "head -1" output
+./pipex_bonus /dev/urandom "cat" "not" "cat" "head -1" output
 RET1=$?
 echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
 ps
@@ -1133,14 +1226,13 @@ fi
 rm -rf leak
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
 
-rm -rf output
-rm -rf output2
-
+echo "" > output
+echo "" >output2
 #test 5
 < /dev/urandom cat | head -5 > input
 echo "toto" >> input
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
-echo -e "\033[1;37m [test 2] [basic test] \033[0m"
+echo -e "\033[1;37m [test 5] [not not cmd] \033[0m"
 echo -e "./pipex_bonus input cat not not "ls" output
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
 ./pipex_bonus input cat not not "ls" output
@@ -1180,8 +1272,12 @@ rm -rf leak
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
 
 #test 6
+echo -e "\033[34m ##############################HERE_DOOOOOOOOOOOOOOOOCCCCCCCCCCCCC#############################\033[0m"
+
 rm -rf output
 rm -rf output2
+rm -rf out
+rm -rf out2
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
 echo -e "\033[1;37m [test 6] [basic here_doc] \033[0m"
 echo -e "( (echo "hello" ; echo "im not"; echo "life"; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "wc -l" out );
@@ -1206,16 +1302,16 @@ echo -e "return Value : \033[31m[NOK]\033[0m"
 echo -e "\033[33m true : $RET2"
 echo -e "yours : $RET1 \033[0m"
 fi
-diff output output2 1>/dev/null 2>/dev/null
+diff out out2 1>/dev/null 2>/dev/null
 if [  "$?" -eq "0" ]
 then
 echo -e "diff output  : \033[32m[OK]\033[0m"
 else
 echo -e "diff output  : \033[31m[NOK]\033[0m"
 echo "diff >"
-diff output output2
+diff out out2
 fi
-valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ( (echo "hello" ; echo "im not"; echo "life"; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "wc -l" out ); 1>/dev/null 2>/dev/null
+((echo "hello" ; echo "im not"; echo "life"; echo "EOF" ) | valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus here_doc EOF "cat" "wc -l" out3 ); 1>/dev/null 2>/dev/null
 if [  "$?" -ne "240" ]
 then
 echo -e "valgrind     : \033[32m[OK]\033[0m"
@@ -1227,7 +1323,8 @@ rm -rf leak
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
 
 #7
-
+rm -rf out
+rm -rf out2
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
 echo -e "\033[1;37m [test 7] [fausse cmd here_doc] \033[0m"
 echo -e "( (echo "hello" ; echo "im not"; echo "life"; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "not" out );
@@ -1252,16 +1349,16 @@ echo -e "return Value : \033[31m[NOK]\033[0m"
 echo -e "\033[33m true : $RET2"
 echo -e "yours : $RET1 \033[0m"
 fi
-diff output output2 1>/dev/null 2>/dev/null
+diff out out2 1>/dev/null 2>/dev/null
 if [  "$?" -eq "0" ]
 then
 echo -e "diff output  : \033[32m[OK]\033[0m"
 else
 echo -e "diff output  : \033[31m[NOK]\033[0m"
 echo "diff >"
-diff output output2
+diff out out2
 fi
-valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ( (echo "hello" ; echo "im not"; echo "life"; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "not" out ); 1>/dev/null 2>/dev/null
+( (echo "hello" ; echo "im not"; echo "life"; echo "EOF" ) | valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus here_doc EOF "cat" "not" out3 ); 1>/dev/null 2>/dev/null
 if [  "$?" -ne "240" ]
 then
 echo -e "valgrind     : \033[32m[OK]\033[0m"
@@ -1275,7 +1372,7 @@ echo -e "\033[1;37m ------------------------------------------------------------
 #8
 
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
-echo -e "\033[1;37m [test 7] [fausse cmd here_doc] \033[0m"
+echo -e "\033[1;37m [test 8] [faux input dans here_doc] \033[0m"
 echo -e "( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "cat" out );
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
 ( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "cat" out );
@@ -1298,16 +1395,16 @@ echo -e "return Value : \033[31m[NOK]\033[0m"
 echo -e "\033[33m true : $RET2"
 echo -e "yours : $RET1 \033[0m"
 fi
-diff output output2 1>/dev/null 2>/dev/null
+diff out out2 1>/dev/null 2>/dev/null
 if [  "$?" -eq "0" ]
 then
 echo -e "diff output  : \033[32m[OK]\033[0m"
 else
 echo -e "diff output  : \033[31m[NOK]\033[0m"
 echo "diff >"
-diff output output2
+diff out out2
 fi
-valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "cat" out ); 1>/dev/null 2>/dev/null
+ ( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus here_doc EOF "cat" "cat" out3 ); 1>/dev/null 2>/dev/null
 if [  "$?" -ne "240" ]
 then
 echo -e "valgrind     : \033[32m[OK]\033[0m"
@@ -1319,15 +1416,17 @@ rm -rf leak
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
 
 #9
-
+cat out
+cat out2
+sleep 5
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
-echo -e "\033[1;37m [test 8] [just EOF] \033[0m"
-echo -e "( (echo "EOF" ; echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "cat" out );
+echo -e "\033[1;37m [test 9] [just EOF] \033[0m"
+echo -e "( (echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "cat" out );
 \033[1;36m>----------------------------------------YOURS---------------------------------------------------"
 ( ( echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "cat" out );
 RET1=$?
 echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
-echo -e "cat << EOF | cat | cat >> out2
+echo -e "cat << EOF | cat >> out2
 \033[1;33m>----------------------------------------TRUE----------------------------------------------------"
 cat << EOF | cat >> out2
 EOF
@@ -1341,16 +1440,16 @@ echo -e "return Value : \033[31m[NOK]\033[0m"
 echo -e "\033[33m true : $RET2"
 echo -e "yours : $RET1 \033[0m"
 fi
-diff output output2 1>/dev/null 2>/dev/null
+diff out out2 1>/dev/null 2>/dev/null
 if [  "$?" -eq "0" ]
 then
 echo -e "diff output  : \033[32m[OK]\033[0m"
 else
 echo -e "diff output  : \033[31m[NOK]\033[0m"
 echo "diff >"
-diff output output2
+diff out out2
 fi
-valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ( ( echo "EOF" ) | ./pipex_bonus here_doc EOF "cat" "cat" out ); 1>/dev/null 2>/dev/null
+( ( echo "EOF" ) | valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus here_doc EOF "cat" "cat" out3 ); 1>/dev/null 2>/dev/null
 if [  "$?" -ne "240" ]
 then
 echo -e "valgrind     : \033[32m[OK]\033[0m"
@@ -1360,3 +1459,61 @@ cat leak
 fi
 rm -rf leak
 echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+
+#10
+
+echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+echo -e "\033[1;37m [test 10] [yes + here_doc] \033[0m"
+echo -e "( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "yes" "head -10" out );
+\033[1;36m>----------------------------------------YOURS---------------------------------------------------"
+( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "yes" "head -10" out );
+RET1=$?
+echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
+echo -e "yes << EOF | head -10 >> out2
+\033[1;33m>----------------------------------------TRUE----------------------------------------------------"
+yes << EOF | head -10 >> out2
+EOF 
+ EOF
+E O F
+EOF
+RET2=$?
+echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
+if [ "$RET1" -eq "$RET2" ]
+then
+echo -e "return Value : \033[32m[OK]\033[0m"
+else
+echo -e "return Value : \033[31m[NOK]\033[0m"
+echo -e "\033[33m true : $RET2"
+echo -e "yours : $RET1 \033[0m"
+fi
+diff out out2 1>/dev/null 2>/dev/null
+if [  "$?" -eq "0" ]
+then
+echo -e "diff output  : \033[32m[OK]\033[0m"
+else
+echo -e "diff output  : \033[31m[NOK]\033[0m"
+echo "diff >"
+diff out out2
+fi
+ ( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | valgrind --log-file="leak" --leak-check=full --show-leak-kinds=all --undef-value-errors=no --error-exitcode=240 --errors-for-leak-kinds=all ./pipex_bonus here_doc EOF "cat" "cat" out3 ); 1>/dev/null 2>/dev/null
+if [  "$?" -ne "240" ]
+then
+echo -e "valgrind     : \033[32m[OK]\033[0m"
+else
+echo -e "valgrind     : \033[31m[NOK]\033[0m"
+cat leak
+fi
+rm -rf leak
+echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+
+#11
+echo -e "\033[1;37m ---------------------------------------------------------------------------------------------\033[0m"
+echo -e "\033[1;37m [test 10] [here_doc same time] \033[0m"
+echo -e "( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "yes" "head -10" out );
+\033[1;36m>----------------------------------------YOURS---------------------------------------------------"
+( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "yes" "head -10" out ) & ( (echo "EOF " ; echo " EOF"; echo "E O F"; echo "EOF" ) | ./pipex_bonus here_doc EOF "yes" "head -10" out );
+RET1=$?
+echo -e "-------------------------------------------------------------------------------------------------<\033[0m"
+echo -e "yes << EOF | head -10 >> out2"
+echo -e "return Value : \033[32m[OK]\033[0m"
+cat out2

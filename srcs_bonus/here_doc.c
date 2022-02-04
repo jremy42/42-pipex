@@ -6,11 +6,11 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:47 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/02 18:48:40 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 11:21:45 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 char	*__get_stdin(t_pipex *pipex, char *stdin)
 {
@@ -19,7 +19,7 @@ char	*__get_stdin(t_pipex *pipex, char *stdin)
 	line = NULL;
 	while (1)
 	{
-		__putstr_fd("heredoc> ", 1);
+		__putstr_fd("heredoc> ", 0);
 		line = get_next_line(0);
 		if (__strncmp(line, pipex->eof, __strlen(pipex->eof)) == 0
 			&& __strlen(line) == __strlen(pipex->eof) + 1)
@@ -54,7 +54,7 @@ int	__here_doc_pipe(t_pipex *pipex)
 	free(stdin);
 	__close(file, pipex);
 	file = open(".hd.tmp", O_RDONLY, 00644);
-	return (file);
+	return (1);
 }
 
 void	__open_doc(t_pipex *pipex, char **av, int ac)
@@ -72,4 +72,10 @@ void	__open_doc(t_pipex *pipex, char **av, int ac)
 		if (pipex->file_out < 0)
 			__exit("Open error\n", pipex, 1, 0);
 	}
+}
+
+void	__here_doc(t_pipex *pipex)
+{
+	__here_doc_pipe(pipex);
+	pipex->file = ".hd.tmp";
 }

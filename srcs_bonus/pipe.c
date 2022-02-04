@@ -6,11 +6,11 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 16:00:06 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/02 13:04:40 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 11:02:29 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 t_pipe	*__pipe_new(int index)
 {

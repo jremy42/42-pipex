@@ -6,11 +6,11 @@
 /*   By: jremy <jremy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:59:40 by jremy             #+#    #+#             */
-/*   Updated: 2022/02/03 10:49:37 by jremy            ###   ########.fr       */
+/*   Updated: 2022/02/04 11:02:29 by jremy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	__close(int file, t_pipex *pipex)
 {
